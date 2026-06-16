@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MonNavigateurIA</string>
+    <string name="title_home">Accueil</string>
+    <string name="title_chat">Chat</string>
+    <string name="title_agents">Agents</string>
+    <string name="title_compare">Comparer</string>
+    <string name="title_settings">Paramètres</string>
+    <string name="message_placeholder">Message Odysseus...</string>
+    <string name="send">Envoyer</string>
+</resources>
