@@ -3,12 +3,9 @@ package com.monnavigateuria.app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -16,16 +13,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +39,6 @@ fun MonNavigateurIAApp() {
     var isLoading by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     
-    MatrixBackground()
-    
     Scaffold(
         bottomBar = { BottomNavigationBar(selectedTab, onTabSelected = { selectedTab = it }) }
     ) { paddingValues ->
@@ -54,7 +46,7 @@ fun MonNavigateurIAApp() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(Color.Black.copy(alpha = 0.9f))
+                .background(Color(0xFF0A0A0A))
         ) {
             Header()
             
@@ -87,38 +79,6 @@ fun MonNavigateurIAApp() {
 }
 
 @Composable
-fun MatrixBackground() {
-    val matrixChars = remember { (0..50).map { Random.nextInt(0, 2).toString() } }
-    var offsetY by remember { mutableStateOf(0f) }
-    
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(100)
-            offsetY += 3f
-            if (offsetY > 500f) offsetY = 0f
-        }
-    }
-    
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        matrixChars.forEachIndexed { index, char ->
-            val x = (index * 25) % size.width.toInt()
-            val y = ((offsetY + index * 15) % size.height)
-            
-            drawContext.canvas.nativeCanvas.drawText(
-                char,
-                x.toFloat(),
-                y.toFloat(),
-                android.graphics.Paint().apply {
-                    color = android.graphics.Color.parseColor("#00FF41")
-                    textSize = 10f
-                    alpha = 20
-                }
-            )
-        }
-    }
-}
-
-@Composable
 fun Header() {
     Box(
         modifier = Modifier
@@ -132,28 +92,9 @@ fun Header() {
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Canvas(modifier = Modifier.size(70.dp)) {
-                drawCircle(
-                    color = Color(0xFFF25D0D),
-                    radius = 30.dp.toPx(),
-                    style = Stroke(width = 3.dp.toPx())
-                )
-                drawLine(
-                    color = Color(0xFF00D9FF),
-                    start = Offset(size.width / 2 - 15, size.height / 2 - 20),
-                    end = Offset(size.width / 2 + 15, size.height / 2 + 20),
-                    strokeWidth = 5.dp.toPx()
-                )
-                drawCircle(
-                    color = Color(0xFFF25D0D),
-                    radius = 5.dp.toPx(),
-                    center = Offset(size.width / 2, size.height / 2)
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "MonNavigateurIA",
-                fontSize = 22.sp,
+                text = "⚡ MonNavigateurIA",
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFFF25D0D)
             )
@@ -301,7 +242,7 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Compare, contentDescription = "Comparer") },
+            icon = { Icon(Icons.Default.Compare, contentDescription = "Compare") },
             label = { Text("Comparer", fontSize = 10.sp) },
             selected = selectedTab == "Compare",
             onClick = { onTabSelected("Compare") },
@@ -313,7 +254,7 @@ fun BottomNavigationBar(selectedTab: String, onTabSelected: (String) -> Unit) {
             )
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Settings, contentDescription = "Paramètres") },
+            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
             label = { Text("Paramètres", fontSize = 10.sp) },
             selected = selectedTab == "Settings",
             onClick = { onTabSelected("Settings") },
@@ -350,19 +291,6 @@ fun AgentsScreen() {
                 color = Color.Gray,
                 fontSize = 14.sp
             )
-            Spacer(modifier = Modifier.height(24.dp))
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF1A1A2E)),
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Agents disponibles:", color = Color(0xFF00D9FF), fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text("• Veille Technologique", color = Color.White)
-                    Text("• Analyse de données", color = Color.White)
-                    Text("• Automatisation", color = Color.White)
-                }
-            }
         }
     }
 }
