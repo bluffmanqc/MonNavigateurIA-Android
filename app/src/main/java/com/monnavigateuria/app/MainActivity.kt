@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +43,7 @@ fun MonNavigateurIAApp() {
     var messages by remember { mutableStateOf(listOf<Message>()) }
     var userInput by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
     
     MatrixBackground()
     
@@ -67,7 +69,7 @@ fun MonNavigateurIAApp() {
                             val currentInput = userInput
                             userInput = ""
                             
-                            kotlinx.coroutines.GlobalScope.launch {
+                            coroutineScope.launch {
                                 delay(1500)
                                 val aiResponse = Message("ai", "Réponse de Odysseus pour: $currentInput")
                                 messages = messages + aiResponse
